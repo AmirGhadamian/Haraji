@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}شروع حراجی{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4 shadow-sm">
+            <h4 class="mb-3">شروع حراجی برای «{{ listing.title }}»</h4>
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-3">
+                    <label class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+                    {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-danger w-100">شروع حراجی</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

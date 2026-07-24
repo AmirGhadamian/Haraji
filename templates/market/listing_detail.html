@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}{{ listing.title }}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6 mb-3">
+        {% if listing.image %}
+        <img src="{{ listing.image.url }}" class="img-fluid rounded shadow-sm">
+        {% else %}
+        <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height:320px;">
+            <span class="text-muted">بدون تصویر</span>
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        {% if listing.status == 'auction' %}
+        <span class="badge badge-auction text-white mb-2">در حال حراجی</span>
+        {% elif listing.status == 'sold' %}
+        <span class="badge bg-secondary mb-2">فروخته شد</span>
+        {% endif %}
+        <h3>{{ listing.title }}</h3>
+        <p class="text-muted">دسته: {{ listing.category|default:"—" }} | فروشنده: {{ listing.seller.username }}</p>
+        <div class="fs-4 price-tag mb-3">
+            {% if listing.status == 'auction' %}
+                قیمت پایه: {{ listing.price }} تومان
+            {% else %}
+                {{ listing.price }} تومان
+            {% endif %}
+        </div>
+        <p>{{ listing.description|linebreaks }}</p>
+
+        {% if listing.status == 'auction' %}
+        <a href="{% url 'auction_detail' listing.auction.pk %}" class="btn btn-danger">مشاهده و شرکت در حراجی</a>
+        {% elif listing.status == 'sold' %}
+        <button class="btn btn-secondary" disabled>فروخته شده</button>
+        {% endif %}
+
+        {% if user == listing.seller and listing.status == 'normal' %}
+        <a href="{% url 'start_auction' listing.pk %}" class="btn btn-outline-danger mt-2">شروع حراجی برای این آگهی</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

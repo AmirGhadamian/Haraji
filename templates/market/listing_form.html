@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}ثبت آگهی جدید{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4 shadow-sm">
+            <h4 class="mb-3">ثبت آگهی جدید</h4>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-3">
+                    <label class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary w-100">ثبت آگهی</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

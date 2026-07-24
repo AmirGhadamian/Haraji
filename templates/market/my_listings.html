@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}پنل من{% endblock %}
+{% block content %}
+<h4 class="mb-3">آگهی‌های من</h4>
+<div class="row mb-4">
+    {% for listing in listings %}
+    <div class="col-md-4 col-lg-3 mb-3">
+        <a href="{% url 'listing_detail' listing.pk %}" class="text-decoration-none text-dark">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6>{{ listing.title }}</h6>
+                    <div class="price-tag">{{ listing.price }} تومان</div>
+                    <span class="badge bg-info">{{ listing.get_status_display }}</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% empty %}
+    <p class="text-muted">هنوز آگهی‌ای ثبت نکرده‌اید.</p>
+    {% endfor %}
+</div>
+
+<h4 class="mb-3">پیشنهادهای من در حراجی‌ها</h4>
+<table class="table table-sm mb-4">
+    <thead><tr><th>آگهی</th><th>مبلغ پیشنهادی</th><th>وضعیت</th></tr></thead>
+    <tbody>
+    {% for bid in my_bids %}
+        <tr>
+            <td><a href="{% url 'auction_detail' bid.auction.pk %}">{{ bid.auction.listing.title }}</a></td>
+            <td>{{ bid.amount }} تومان</td>
+            <td>{% if bid.auction.is_closed %}پایان‌یافته{% else %}فعال{% endif %}</td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="3" class="text-muted">هنوز در حراجی‌ای شرکت نکرده‌اید.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h4 class="mb-3">حراجی‌هایی که برنده شده‌اید 🏆</h4>
+<div class="row">
+    {% for auction in won %}
+    <div class="col-md-4 col-lg-3 mb-3">
+        <a href="{% url 'auction_detail' auction.pk %}" class="text-decoration-none text-dark">
+            <div class="card shadow-sm border-success">
+                <div class="card-body">
+                    <h6>{{ auction.listing.title }}</h6>
+                    <div class="price-tag">{{ auction.current_price }} تومان</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% empty %}
+    <p class="text-muted">هنوز حراجی‌ای برنده نشده‌اید.</p>
+    {% endfor %}
+</div>
+{% endblock %}
